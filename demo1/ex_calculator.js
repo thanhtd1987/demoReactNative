@@ -3,22 +3,22 @@ import{
     View, Text,StyleSheet
 }from 'react-native';
 
-class calculator extends Component{
+class Calculator extends Component{
     render(){
         return(
             <View style={{flexDirection:'column'}}>
                 <View style={myStyle.item_column}>
                     <View style={myStyle.item_row}>
                         <Text style={myStyle.big_number}>2</Text>
-                        <Text style={{flex:1, color:'blue'}}ABC></Text>
+                        <Text style={myStyle.small_number}ABC></Text>
                     </View>
                     <View style={myStyle.item_row}>
                         <Text style={myStyle.big_number}>2</Text>
-                        <Text style={{flex:1, color:'blue'}}ABC></Text>
+                        <Text style={myStyle.small_number}ABC></Text>
                     </View>
                     <View style={myStyle.item_row}>
                         <Text style={myStyle.big_number}>2</Text>
-                        <Text style={{flex:1, color:'blue'}}ABC></Text>
+                        <Text style={myStyle.small_number}ABC></Text>
                     </View>
                 </View>
                 <View style={myStyle.item_column}>
@@ -33,7 +33,7 @@ class calculator extends Component{
                     <View style={myStyle.item_row}></View>
                     <View style={myStyle.item_row}></View>
                     <View style={myStyle.item_row}></View></View>
-                <View style={{justifyContent:'center', alignContent:'center'}}></View>
+                
             </View>
         );
     }
@@ -58,6 +58,10 @@ var myStyle = StyleSheet.create({
     big_number:{
         fontSize:40,
         flex:1
+    },
+    small_number:{
+        flex:1, 
+        color:'blue'
     }
 
 });
