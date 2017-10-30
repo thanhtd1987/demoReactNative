@@ -1,6 +1,6 @@
 // import { AppRegistry } from 'react-native';
 // import App from './App';
-// import Calculator from './ex_calculator';
+import Calculator from './ex_calculator';
 
 import React, {Component} from "react";
 import {
@@ -25,11 +25,11 @@ class Demo1 extends Component{
         return(
             // <StatusBar hidden="true"></StatusBar>
 
-            // <View style={myStyle.bao}>
+            <View style={myStyle.bao}>
             //     <Text style={myStyle.tomtat}>Hello world!</Text>
             //     <Text style={myStyle.tieude}>Text 2, 2 style</Text>
             //     <Text style={{backgroundColor:'violet',flex:1}}></Text>
-            // </View>
+            </View>
 
 
         );
@@ -67,4 +67,5 @@ var myStyle = StyleSheet.create({
 
 });
 
-AppRegistry.registerComponent('demo1', () => Demo1);
+AppRegistry.registerComponent('demo1', () => Calculator);
+// AppRegistry.registerComponent('demo1', () => Demo1);

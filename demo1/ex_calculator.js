@@ -3,7 +3,7 @@ import{
     View, Text,StyleSheet
 }from 'react-native';
 
-class Calculator extends Component{
+export default class Calculator extends Component{
     render(){
         return(
           <View style={{flexDirection:"column",flex:1}}>
