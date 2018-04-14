@@ -1,0 +1,17 @@
+{
+    "teas": [
+        {
+            "id": 1,
+            "name": "Lemon tea",
+            "image": "https://healthfacts.ng/wp-content/uploads/2016/03/tea--768x591.jpg",
+            "description": "tea of lemon"
+        },
+        {
+            "id": 2,
+            "name": "Peach tea",
+            "image": "https://healthfacts.ng/wp-content/uploads/2016/03/tea--768x591.jpg",
+            "description": "tea of peadh"
+        }
+        
+    ]
+}
