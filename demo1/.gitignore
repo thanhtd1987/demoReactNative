@@ -103,3 +103,6 @@ fastlane/report.xml
 fastlane/Preview.html
 
 fastlane/screenshots
+
+#vscode
+.vscode
