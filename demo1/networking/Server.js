@@ -17,20 +17,17 @@ async function getTeaFromServer(params) {
 async function insertNewTeaToServer (param) {
     try {
         let response = await fetch(apiInsertTea, {
-            merthod: 'POST',
+            method: 'POST',
             headers: {
-                'Accept':'application/json; charset=UTF-8'
+                "Content-type": "application/json; charset=UTF-8"
             },
-            body: JSON.stringify({
-                name:'king of tea',
-                description: 'tea with many flavors',
-                image: '',
-                id: param
-            })
+            body: JSON.stringify(param)
         })
+        let responseJson = await response.json()
+        return responseJson
     } catch (error) {
         console.error(`Error: ${error}`)
     }
 }
 
-export {getTeaFromServer}
+export {getTeaFromServer, insertNewTeaToServer}
