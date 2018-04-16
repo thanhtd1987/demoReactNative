@@ -7,18 +7,33 @@ import {
     StyleSheet,
     RefreshControl,
     Button,
+    TouchableWithoutFeedback,
 } from 'react-native';
 
 import { getTeaFromServer, insertNewTeaToServer } from '../../networking/Server';
 
 class FlatListItem extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      selected: false
+    }
+  }
+
+  _selectItem = (select) => {
+    this.setState( {selected: select})
+    this.props.parentFlatList.updateSelectedItem(this)
+  }
+
     render() {
       return (
+        <TouchableWithoutFeedback style={{flex: 1}} onPress={() => {this._selectItem(!this.state.selected)} }>
         <View style={{flex: 1,
             flexDirection: 'row',
-            backgroundColor:'lightseagreen',
+            backgroundColor: this.state.selected == true ? 'seagreen' :'lightseagreen',
             borderBottomWidth: 1,
             borderBottomColor: 'white'
+
           }} >
             <Image source={{uri:this.props.item.image}}
             style={{width: 100, height: 100, margin: 5}}
@@ -29,6 +44,7 @@ class FlatListItem extends Component {
                 <Text style={{flex: 50, color: 'blue'}}>{this.props.item.description}</Text>
             </View>
         </View>
+        </TouchableWithoutFeedback>
       )
     };
 }
@@ -40,6 +56,7 @@ export default class NetworkingDemo extends Component {
             refreshing: false,
             addItem: false,
             teas: [],
+            selectedItem: null,
         }
     }
 
@@ -85,11 +102,27 @@ export default class NetworkingDemo extends Component {
       })
     }
 
+  updateSelectedItem(item)  {
+    if(this.state.selectedItem != item) {
+      if(this.state.selectedItem != null)
+        this.state.selectedItem._selectItem(false)
+      this.setState({selectedItem: item})
+    } else {
+      this.setState({selectedItem: null})
+    }
+  }
+
+  editTea = ()=> {
+    
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Text style={{flex: 1}}> Test fetch data frrom server </Text>
+
+          <Button style={{marginRight: 15}} title='EDIT' onPress={ this.insertTea}   />
 
           <Button style={{marginRight: 15}} title='ADD' onPress={ this.insertTea}   />
 

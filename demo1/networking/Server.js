@@ -3,6 +3,7 @@ import { AppRegistry, SectionList, StyleSheet, Text, View, Alert, Platform } fro
 
 const apiGetAllTeas = 'https://my-json-server.typicode.com/thanhtd1987/demoReactNative/teas'
 const apiInsertTea = 'https://my-json-server.typicode.com/thanhtd1987/demoReactNative/teas'
+const apiEditTea = 'https://my-json-server.typicode.com/thanhtd1987/demoReactNative/teas/'
 
 async function getTeaFromServer(params) {
     try {
@@ -10,7 +11,7 @@ async function getTeaFromServer(params) {
         let responseJson = await response.json()
         return responseJson //list of teas
     } catch (error) {
-        console.error(`Error: ${error}`)
+        console.error(`GET error: ${error}`)
     }
 }
 
@@ -26,8 +27,25 @@ async function insertNewTeaToServer (param) {
         let responseJson = await response.json()
         return responseJson
     } catch (error) {
-        console.error(`Error: ${error}`)
+        console.error(`POST Error: ${error}`)
     }
+}
+
+async function editTeaInServer(param) {
+  let api = apiEditTea + param.id.toString()
+  try {
+    let response = await fetch(api, {
+      method: 'PUT',
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      },
+      body: JSON.stringify(param)
+    })
+    let responseJson = await response.json()
+    return responseJson
+  } catch (e) {
+    console.log(`PUT Error: ${e}`);
+  }
 }
 
 export {getTeaFromServer, insertNewTeaToServer}
