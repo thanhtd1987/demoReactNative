@@ -48,4 +48,4 @@ async function editTeaInServer(param) {
   }
 }
 
-export {getTeaFromServer, insertNewTeaToServer}
+export {getTeaFromServer, insertNewTeaToServer, editTeaInServer}

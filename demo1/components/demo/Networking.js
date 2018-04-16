@@ -10,7 +10,7 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 
-import { getTeaFromServer, insertNewTeaToServer } from '../../networking/Server';
+import { getTeaFromServer, insertNewTeaToServer, editTeaInServer } from '../../networking/Server';
 
 class FlatListItem extends Component {
   constructor(props) {
@@ -23,6 +23,10 @@ class FlatListItem extends Component {
   _selectItem = (select) => {
     this.setState( {selected: select})
     this.props.parentFlatList.updateSelectedItem(this)
+  }
+
+  getItem() {
+    return( this.props.item)
   }
 
     render() {
@@ -54,7 +58,7 @@ export default class NetworkingDemo extends Component {
         super(props)
         this.state = {
             refreshing: false,
-            addItem: false,
+            changingItems: false,
             teas: [],
             selectedItem: null,
         }
@@ -76,14 +80,14 @@ export default class NetworkingDemo extends Component {
     }
 
     onRefresh= () => {
-        if(!this.state.addItem) {
+        if(!this.state.changingItems) {
           this.setState({ teas: [] })
           this.refreshDataFromServer()
         }
     }
 
     insertTea = ()=> {
-      this.setState({ refreshing: true, addItem: true})
+      this.setState({ refreshing: true, changingItems: true})
       const newTea = {
           id: this.state.teas.lenght,
           name:'king of tea',
@@ -95,10 +99,10 @@ export default class NetworkingDemo extends Component {
         this.setState({ })
         this.setState( (preState)=> {
           let tempt = preState.teas.concat(result)
-          return { teas: tempt, refreshing: false, addItem: false }
+          return { teas: tempt, refreshing: false, changingItems: false }
         })
       }).catch((error)=>{
-          this.setState({ refreshing: false, addItem: false})
+          this.setState({ refreshing: false, changingItems: false})
       })
     }
 
@@ -113,18 +117,36 @@ export default class NetworkingDemo extends Component {
   }
 
   editTea = ()=> {
-    
+    if(this.state.selectedItem != null) {
+      this.setState({ refreshing: true, changingItems: true})
+      let editItem = this.state.selectedItem.getItem()
+      editItem.name += ' edited'
+      editItem.description += ' edited'
+      
+      editTeaInServer(editItem).then( (result)=> {
+        this.setState({ refreshing: false, changingItems: false})
+        this.setState( (preState)=> {
+          let index = preState.teas.findIndex(tea => tea.id === result.id)
+          let editTeas = preState.teas
+          editTeas[index] = result
+          return {teas : editTeas}
+        })
+      }).catch( (error)=>{
+        this.setState({ refreshing: false, changingItems: false})
+        alert(`Edit Error: ${error}`)
+      })
+    }
   }
 
   render() {
     return (
       <View style={{flex: 1}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={{flex: 1}}> Test fetch data frrom server </Text>
+          <Text style={{flex: 1}} >Test fetch data from server </Text>
 
-          <Button style={{marginRight: 15}} title='EDIT' onPress={ this.insertTea}   />
+          <Button style={{marginRight: 15}} color='red' title='EDIT' onPress={ this.editTea}   />
 
-          <Button style={{marginRight: 15}} title='ADD' onPress={ this.insertTea}   />
+          <Button style={{marginRight: 15}}  title='ADD' onPress={ this.insertTea}   />
 
         </View>
 
