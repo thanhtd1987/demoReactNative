@@ -94,6 +94,7 @@ buck-out/
 
 # For more information about the recommended setup visit:
 
+<<<<<<< ours
 # https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Gitignore.md
 
 
@@ -106,3 +107,11 @@ fastlane/screenshots
 
 #vscode
 .vscode
+=======
+*/fastlane/report.xml
+*/fastlane/Preview.html
+*/fastlane/screenshots
+
+# Bundle artifact
+*.jsbundle
+>>>>>>> theirs
