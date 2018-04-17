@@ -10,7 +10,7 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 
-import { getTeaFromServer, insertNewTeaToServer, editTeaInServer } from '../../networking/Server';
+import { getTeaFromServer, insertNewTeaToServer, editTeaInServer, deleteTeaInServer } from '../../networking/Server';
 
 class FlatListItem extends Component {
   constructor(props) {
@@ -138,13 +138,34 @@ export default class NetworkingDemo extends Component {
     }
   }
 
+  deleteTea = ()=> {
+    if(this.state.selectedItem !=null) {
+      this.setState({refreshing: true, changingItems: true})
+      let id = this.state.selectedItem.id
+
+      deleteTeaInServer(id).then( (result)=> {
+        this.setState( (preState)=>{
+          let deletedTeas = preState.teas
+          let index = deletedTeas.findIndex(tea => tea.id === result.id)
+          deletedTeas.splice(index, 1)
+
+          return {teas: deletedTeas}
+        })
+      }).catch( (error)=> {
+        this.setState({ refreshing: true, changingItems: true})
+      })
+    }
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Text style={{flex: 1}} >Test fetch data from server </Text>
 
-          <Button style={{marginRight: 15}} color='red' title='EDIT' onPress={ this.editTea}   />
+          <Button style={{marginRight: 15}} color='red' title='DELETE' onPress={ this.deleteTea}   />
+
+          <Button style={{marginRight: 15}} color='green' title='EDIT' onPress={ this.editTea}   />
 
           <Button style={{marginRight: 15}}  title='ADD' onPress={ this.insertTea}   />
 

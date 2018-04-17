@@ -48,4 +48,18 @@ async function editTeaInServer(param) {
   }
 }
 
-export {getTeaFromServer, insertNewTeaToServer, editTeaInServer}
+async function deleteTeaInServer(id) {
+    let api = apiDeleteTea + id
+    try {
+        let response = await fetch(api, {
+            method: 'DELETE'
+        })
+        // let responseJson = await response.json()
+        alert(`delete ${response}`)
+        return responseJson
+    } catch (error) {
+        console.log(`DELETE error: ${error}`)
+    }
+}
+
+export {getTeaFromServer, insertNewTeaToServer, editTeaInServer, deleteTeaInServer}
