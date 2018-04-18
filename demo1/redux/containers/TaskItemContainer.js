@@ -10,5 +10,5 @@ const mapDispatchToProps = (dispatch)=> {
   }
 }
 
-const TaskItemContainer = connect(mapDispatchToProps)(TaskItemComponent)
+const TaskItemContainer = connect(null, mapDispatchToProps)(TaskItemComponent)
 export default TaskItemContainer

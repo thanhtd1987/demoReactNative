@@ -11,15 +11,15 @@ import {
 export default class TaskItemComponent extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <TouchableOpacity onPress={()=> { //call action in container
-          }}
+        <TouchableOpacity
+          style={[styles.container, {backgroundColor: this.props.completed == true? 'darkgreen': 'cyan'}]}
+          onPress={()=> { //call action in container
+            this.props.onToggleItem(this.props.taskId)
+            }}
           >
-          <Text style={{backgroundColor: this.props.item.completed == true? 'darkgreen': 'cyan'}}
-            >{this.props.item.taskName}</Text>
+          <Text 
+            >{this.props.taskName}</Text>
         </TouchableOpacity>
-
-      </View>
     );
   }
 }
@@ -27,5 +27,8 @@ export default class TaskItemComponent extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray'
   },
 });
