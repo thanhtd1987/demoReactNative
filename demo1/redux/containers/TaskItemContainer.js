@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {toggleTask} from '../actions'
-import TaksItemComponent from '../../components/TODOAppRedux/TaskItemComponent'
+import TaskItemComponent from '../../components/TODOAppRedux/TaskItemComponent'
 
 const mapDispatchToProps = (dispatch)=> {
   return {
@@ -10,5 +10,5 @@ const mapDispatchToProps = (dispatch)=> {
   }
 }
 
-const TaskItemContainer = connect(mapDispatchToProps)(TaksItemComponent)
+const TaskItemContainer = connect(mapDispatchToProps)(TaskItemComponent)
 export default TaskItemContainer
