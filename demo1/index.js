@@ -9,16 +9,16 @@ import NetworkingDemo from './components/demo/Networking';
 import TODOApp from './components/TODOAppRedux/TODOApp'
 
 //redux
-import {createStore} from 'redux';
-import {Provider} from 'react-redux'
+// import {createStore} from 'redux';
+// import {Provider} from 'react-redux'
+//
+// import allReducers from './redux/reducers'
+//
+// let store = createStore(allReducers)
+// const App = () => (
+//   <Provider store={store} >
+//     <TODOApp />
+//   </Provider>
+// )
 
-import allReducers from './redux/reducers'
-
-let store = createStore(allReducers)
-const App = () => (
-  <Provider store={store} >
-    <TODOApp />
-  </Provider>
-)
-
-AppRegistry.registerComponent('demo1', () => App)
+AppRegistry.registerComponent('demo1', () => TODOApp)

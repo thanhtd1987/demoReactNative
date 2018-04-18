@@ -7,21 +7,25 @@ import {
   StyleSheet,
 } from 'react-native';
 //redux
-// import {createStore} from 'redux';
-// import {Provider} from 'react-redux'
-//
-// import allReducers from '../../redux/reducers'
+import {createStore} from 'redux';
+import {Provider} from 'react-redux'
+
+import allReducers from '../../redux/reducers'
 
 import AddContainer from '../../redux/containers/AddContainer'
 import TaskListContainer from '../../redux/containers/TaskListContainer'
 
 export default class TODOApp extends Component {
   render() {
+    let store = createStore(allReducers)
     return (
-      <View style={{flex: 1,}} >
-        <AddContainer />
-        <TaskListContainer />
-      </View>
+      <Provider store={store} >
+        <View style={styles.container} >
+          <AddContainer />
+          <TaskListContainer />
+        </View>
+        
+    </Provider>
     );
   }
 }
