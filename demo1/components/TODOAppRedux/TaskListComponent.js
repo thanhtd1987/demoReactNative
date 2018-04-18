@@ -11,14 +11,14 @@ import TaskItemContainer from '../../redux/containers/TaskItemContainer'
 export default class TaskListComponent extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      tasks: []
-    }
+    // this.state = {
+    //   tasks: []
+    // }
   }
   render() {
     return (
       <FlatList style={styles.container}
-        data={this.state.tasks}
+        data={this.props.tasks}
         renderItem={ ({item, index})=> {
           return (
             <TaskItemContainer {...item} >
@@ -26,6 +26,7 @@ export default class TaskListComponent extends Component {
             </TaskItemContainer>
           )}
         }
+        keyExtractor={ (item, index) => item.taskName}
         >
 
       </FlatList>
