@@ -7,18 +7,21 @@ import NetworkingDemo from './components/demo/Networking';
 
 //demo Redux by TODO app demo
 import TODOApp from './components/TODOAppRedux/TODOApp'
-
+//demo CountNumberRedux
+import CountNumber from './components/CountNumberRedux'
 //redux
 // import {createStore} from 'redux';
 // import {Provider} from 'react-redux'
-//
+// //
 // import allReducers from './redux/reducers'
+//
+
 //
 // let store = createStore(allReducers)
 // const App = () => (
 //   <Provider store={store} >
-//     <TODOApp />
+//     <CountNumber />
 //   </Provider>
 // )
 
-AppRegistry.registerComponent('demo1', () => TODOApp)
+AppRegistry.registerComponent('demo1', () => CountNumber)

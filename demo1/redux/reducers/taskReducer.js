@@ -1,6 +1,6 @@
 import {ADD_NEW_TASK, TOGGLE_ONE_TASK} from '../actions/actionTypes'
 
-const taskReducers = (tasks = [], action) => {
+const taskReducers = (tasks = [], action) => { //(previousState, action) => newState
   switch (action.type) {
     case ADD_NEW_TASK:
       return [
