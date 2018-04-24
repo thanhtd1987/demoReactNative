@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 // import App from './components/App';
 import Calculator from './components/ex_calculator';
 //test API requets: GET, POST, PUT, DELETE
-import NetworkingDemo from './components/demo/Networking';
+import NetworkingApplyRedux from './components/demo/Networking';
+import NetworkingWithoutRedux from './components/demo/NetworkingWithoutRedux'
 
 //demo Redux by TODO app demo
 import TODOApp from './components/TODOAppRedux/TODOApp'
@@ -24,4 +25,4 @@ import CountNumber from './components/CountNumberRedux'
 //   </Provider>
 // )
 
-AppRegistry.registerComponent('demo1', () => CountNumber)
+AppRegistry.registerComponent('demo1', () => NetworkingApplyRedux)

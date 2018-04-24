@@ -10,6 +10,12 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 
+import {connect, Provider} from 'react-redux';
+import {bindActionCreators, createStore} from 'redux';
+
+import * as actionName from '../../redux/actions/teaActions'
+import allReducers from '../../redux/reducers'
+
 import { getTeaFromServer, insertNewTeaToServer, editTeaInServer, deleteTeaInServer } from '../../networking/Server';
 
 class FlatListItem extends Component {
@@ -53,117 +59,107 @@ class FlatListItem extends Component {
     };
 }
 
-export default class NetworkingDemo extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            refreshing: false,
-            changingItems: false,
-            teas: [],
-            selectedItem: null,
-        }
-    }
+class NetworkingDemo extends Component {
 
-    componentDidMount() {
-        this.refreshDataFromServer()
-    }
+  actions() { return this.props.actions}
 
-    refreshDataFromServer = () => {
-        this.setState({ refreshing: true})
-        getTeaFromServer().then( (teaFromServer)=> {
-            this.setState({ refreshing: false})
-            this.setState({ teas: teaFromServer })
-        }).catch((error)=>{
-            this.setState({ refreshing: false})
-            this.setState({ teas: [] })
-        })
-    }
+  toggleLoadingForChangingList(toggle) {
+    this.actions().toggleLoading(toggle)
+    this.actions().changingItem(toggle)
+  }
 
-    onRefresh= () => {
-        if(!this.state.changingItems) {
-          this.setState({ teas: [] })
-          this.refreshDataFromServer()
-        }
-    }
+  componentDidMount() {
+      this.refreshDataFromServer()
+  }
 
-    insertTea = ()=> {
-      this.setState({ refreshing: true, changingItems: true})
-      const newTea = {
-          id: this.state.teas.lenght,
-          name:'king of tea',
-          image: 'https://media.foody.vn/res/g70/691323/s600x600/20171111143543-tra-chanh-leo-cam-buoi.jpg',
-          description: 'tea with many flavors'
-      }
-
-      insertNewTeaToServer(newTea).then( (result)=> {
-        this.setState({ })
-        this.setState( (preState)=> {
-          let tempt = preState.teas.concat(result)
-          return { teas: tempt, refreshing: false, changingItems: false }
-        })
+  refreshDataFromServer = () => {
+      this.actions().toggleLoading(true)
+      getTeaFromServer().then( (teaFromServer)=> {
+          this.actions().toggleLoading(false)
+          this.actions().addTeaList(teaFromServer)
       }).catch((error)=>{
-          this.setState({ refreshing: false, changingItems: false})
+          this.actions().toggleLoading(false)
+          // this.setState({ teas: [] })
       })
+  }
+
+  onRefresh= () => {
+      if(!this.props.changingItems) {
+        // this.setState({ teas: [] })
+        this.refreshDataFromServer()
+      }
+  }
+
+  insertTea = ()=> {
+    this.toggleLoadingForChangingList(true)
+    const newTea = {
+        id: this.props.teas.lenght,
+        name:'king of tea',
+        image: 'https://media.foody.vn/res/g70/691323/s600x600/20171111143543-tra-chanh-leo-cam-buoi.jpg',
+        description: 'tea with many flavors'
     }
+
+    insertNewTeaToServer(newTea).then( (result)=> {
+      this.actions().addTea(newTea.name, newTea.description, newTea.image)
+      this.toggleLoadingForChangingList(false)
+    }).catch((error)=>{
+        this.toggleLoadingForChangingList(false)
+    })
+  }
 
   updateSelectedItem(item)  {
-    if(this.state.selectedItem != item) {
-      if(this.state.selectedItem != null)
-        this.state.selectedItem._selectItem(false)
-      this.setState({selectedItem: item})
+    if(this.props.selectedItem != item) {
+      if(this.props.selectedItem != null
+        && this.props.teas.findIndex(tea=> tea == this.props.selectedItem.getItem()) != -1)
+        this.props.selectedItem._selectItem(false)
+      this.actions().updateSelectedItem(item)
     } else {
-      this.setState({selectedItem: null})
+      this.actions().updateSelectedItem(null)
     }
   }
 
   editTea = ()=> {
-    if(this.state.selectedItem != null) {
-      this.setState({ refreshing: true, changingItems: true})
-      let editItem = this.state.selectedItem.getItem()
+    if(this.props.selectedItem != null) {
+      this.toggleLoadingForChangingList(true)
+
+      let editItem = this.props.selectedItem.getItem()
       editItem.name += ' edited'
       editItem.description += ' edited'
-      
+
       editTeaInServer(editItem).then( (result)=> {
-        this.setState({ refreshing: false, changingItems: false})
-        this.setState( (preState)=> {
-          let index = preState.teas.findIndex(tea => tea.id === result.id)
-          let editTeas = preState.teas
-          editTeas[index] = result
-          return {teas : editTeas}
-        })
+        this.toggleLoadingForChangingList(false)
+        this.actions().editTea(editItem.id, editItem.name, editItem.description)
       }).catch( (error)=>{
-        this.setState({ refreshing: false, changingItems: false})
+        this.toggleLoadingForChangingList(false)
         alert(`Edit Error: ${error}`)
       })
     }
   }
 
-  deleteTea = ()=> {
-    if(this.state.selectedItem !=null) {
-      this.setState({refreshing: true, changingItems: true})
-      let id = this.state.selectedItem.id
+  deleteTeaItem = ()=> {
+    if(this.props.selectedItem !=null) {
+      this.toggleLoadingForChangingList(true)
+
+      let id = this.props.selectedItem.getItem().id
 
       deleteTeaInServer(id).then( (result)=> {
-        this.setState( (preState)=>{
-          let deletedTeas = preState.teas
-          let index = deletedTeas.findIndex(tea => tea.id === result.id)
-          deletedTeas.splice(index, 1)
-
-          return {teas: deletedTeas}
-        })
+        this.actions().deleteTea(id)
+        this.toggleLoadingForChangingList(false)
       }).catch( (error)=> {
-        this.setState({ refreshing: true, changingItems: true})
+        this.toggleLoadingForChangingList(false)
+        alert(`DELETE Error: ${error}`)
       })
     }
   }
 
+  //render component
   render() {
     return (
       <View style={{flex: 1}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Text style={{flex: 1}} >Test fetch data from server </Text>
 
-          <Button style={{marginRight: 15}} color='red' title='DELETE' onPress={ this.deleteTea}   />
+          <Button style={{marginRight: 15}} color='red' title='DELETE' onPress={ this.deleteTeaItem}   />
 
           <Button style={{marginRight: 15}} color='green' title='EDIT' onPress={ this.editTea}   />
 
@@ -173,7 +169,7 @@ export default class NetworkingDemo extends Component {
 
         <FlatList style={{borderTopColor:'red', borderTopWidth: 2}}
             ref={'flatlist'}
-            data={this.state.teas}
+            data={this.props.teas}
             renderItem={({item, index})=> {
                 return(
                     <FlatListItem item={item} index={index} parentFlatList={this}
@@ -183,7 +179,7 @@ export default class NetworkingDemo extends Component {
             keyExtractor={(item, index) => item.id.toString()}
             refreshControl={
                 <RefreshControl
-                    refreshing={this.state.refreshing}
+                    refreshing={this.props.refreshing}
                     onRefresh={this.onRefresh}
             />}
         ></FlatList>
@@ -192,6 +188,27 @@ export default class NetworkingDemo extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const mapStateToProps = (state) => {
+  return {
+    teas: state.teaReducers.teas,
+    lastId: state.teaReducers.lastEditedId,
+    refreshing: state.displayReducers.refreshing,
+    changingItems: state.displayReducers.changingItems,
+    selectedItem: state.displayReducers.selectedItem,
+  }
+}
 
-})
+const mapDispatchToProps = (dispatch) => ({ actions: bindActionCreators(actionName, dispatch) })
+
+const ContainerNetworkingRedux = connect(mapStateToProps, mapDispatchToProps)(NetworkingDemo)
+
+export default class NetworkingWithRedux extends Component {
+  render() {
+    let store = createStore(allReducers)
+    return (
+      <Provider store={store}>
+        <ContainerNetworkingRedux />
+      </Provider>
+    );
+  }
+}
