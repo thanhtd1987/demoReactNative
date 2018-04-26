@@ -3,6 +3,8 @@ import {
   TOGGLE_LOADING, CHANGING_ITEM, UPDATE_SELECTED_ITEM
 } from './actionTypes'
 
+import { getTeaFromServer, insertNewTeaToServer, editTeaInServer, deleteTeaInServer } from '../../networking/Server';
+
 export function addTeaList(list) {
   return {
     type: ADD_TEA_LIST,
@@ -49,5 +51,25 @@ export function updateSelectedItem(item) {
   return{
     type: UPDATE_SELECTED_ITEM,
     selected: item
+  }
+}
+
+export function addMoreTea(newTea){
+  return (dispatch) => {
+    dispatch(toggleLoading(true))
+    insertNewTeaToServer(newTea).then( (result) => {
+      //using result
+      dispatch(addTea(newTea.name, newTea.description, newTea.image))
+      // dispatch({
+      //   type: ADD_TEA,
+      //   teaName: newTea.name,
+      //   teaDes: newTea.description,
+      //   teaUrl: newTea.image
+      // })
+      dispatch(toggleLoading(false))
+    }).catch( (error) => {
+      dispatch(toggleLoading(false))
+      console.log('Add more error: ', error)
+    })
   }
 }

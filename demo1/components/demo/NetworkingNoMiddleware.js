@@ -11,8 +11,7 @@ import {
 } from 'react-native';
 
 import {connect, Provider} from 'react-redux';
-import {bindActionCreators, createStore, applyMiddleware} from 'redux';
-import thunk from 'redux-thunk'
+import {bindActionCreators, createStore} from 'redux';
 
 import * as actionName from '../../redux/actions/teaActions'
 import allReducers from '../../redux/reducers'
@@ -92,20 +91,20 @@ class NetworkingDemo extends Component {
   }
 
   insertTea = ()=> {
-    // this.toggleLoadingForChangingList(true)
+    this.toggleLoadingForChangingList(true)
     const newTea = {
         id: this.props.teas.lenght,
         name:'king of tea',
         image: 'https://media.foody.vn/res/g70/691323/s600x600/20171111143543-tra-chanh-leo-cam-buoi.jpg',
         description: 'tea with many flavors'
     }
-this.actions().addMoreTea(newTea)
-    // insertNewTeaToServer(newTea).then( (result)=> {
-    //   this.actions().addTea(newTea.name, newTea.description, newTea.image)
-    //   this.toggleLoadingForChangingList(false)
-    // }).catch((error)=>{
-    //     this.toggleLoadingForChangingList(false)
-    // })
+
+    insertNewTeaToServer(newTea).then( (result)=> {
+      this.actions().addTea(newTea.name, newTea.description, newTea.image)
+      this.toggleLoadingForChangingList(false)
+    }).catch((error)=>{
+        this.toggleLoadingForChangingList(false)
+    })
   }
 
   updateSelectedItem(item)  {
@@ -205,7 +204,7 @@ const ContainerNetworkingRedux = connect(mapStateToProps, mapDispatchToProps)(Ne
 
 export default class NetworkingWithRedux extends Component {
   render() {
-    let store = createStore(allReducers, applyMiddleware(thunk))
+    let store = createStore(allReducers)
     return (
       <Provider store={store}>
         <ContainerNetworkingRedux />

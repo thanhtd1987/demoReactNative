@@ -11,7 +11,10 @@
     "react-native": "0.55.3",
     "react-native-vector-icons": "^4.6.0",
     "react-redux": "^5.0.7",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "redux-observable": "^0.18.0",
+    "redux-saga": "^0.16.0",
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
